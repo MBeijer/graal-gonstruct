@@ -16,7 +16,7 @@ struct texture_info {
   float width;
   float height;
   unsigned int index;
-  
+
   unsigned int image_width, image_height;
 };
 
@@ -24,7 +24,7 @@ class ogl_texture_cache {
 public:
   typedef std::map<std::string, texture_info> texture_map_type;
 
-  ogl_texture_cache(image_cache& cache);
+  explicit ogl_texture_cache(image_cache& cache);
 
   const texture_info& get_texture(const std::string& file_name);
 protected:

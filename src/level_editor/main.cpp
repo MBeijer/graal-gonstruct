@@ -3,7 +3,6 @@
 #include "preferences_display.hpp"
 #include <gtkmm.h>
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/filesystem/convenience.hpp>
 
@@ -63,7 +62,7 @@ int main(int argc, char* argv[]) {
   boost::filesystem::path preferences_path;
   preferences_path = Glib::get_user_config_dir();
   preferences_path = preferences_path / "gonstruct";
-  
+
   // Make sure all directories to this path exist
   boost::filesystem::create_directories(preferences_path);
 
@@ -87,7 +86,7 @@ int main(int argc, char* argv[]) {
             false));
     }
 
-    kit.run();
+    Gtk::Main::run();
   }
   prefs.save(preferences_path / "preferences");
 

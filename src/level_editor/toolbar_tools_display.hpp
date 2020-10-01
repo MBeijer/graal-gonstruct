@@ -11,7 +11,7 @@ namespace Graal {
     class toolbar_tools_display: public Gtk::VBox {
     public:
       toolbar_tools_display(window& win, preferences& prefs);
-      virtual ~toolbar_tools_display();
+      ~toolbar_tools_display() override;
     protected:
       void on_hide_npcs_toggled();
       void on_hide_signs_toggled();

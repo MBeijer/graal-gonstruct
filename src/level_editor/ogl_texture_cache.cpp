@@ -24,7 +24,7 @@ void ogl_texture_cache::on_cache_updated() {
 }
 
 const texture_info& ogl_texture_cache::get_texture(const std::string& file_name) {
-  texture_map_type::iterator iter = m_textures.find(file_name);
+  auto iter = m_textures.find(file_name);
   if (iter != m_textures.end() && iter->second.index)
     return iter->second;
 

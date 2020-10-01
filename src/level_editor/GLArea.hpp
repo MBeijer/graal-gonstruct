@@ -5,9 +5,9 @@
 
 class GLArea: public Gtk::EventBox  {
 public:
-  GLArea() {}
+  GLArea() = default;
   GLArea(int* attrList);
-  virtual ~GLArea();
+  ~GLArea() override;
 
   // Signal proxies
   virtual void on_gl_realize() {}
@@ -21,7 +21,7 @@ public:
 
 private:
   // The Glib-wrapped GtkGLArea
-  Gtk::DrawingArea* m_glarea;
+  Gtk::DrawingArea* m_glarea{};
 
   // Pass this to on_gl_init
   void glarea_on_realize();

@@ -18,7 +18,7 @@ namespace Graal {
       typedef std::map<std::string, image_ptr> image_map_type;
       typedef sigc::signal<void> signal_cache_update_type;
 
-      image_cache(filesystem& fs);
+      explicit image_cache(filesystem& fs);
 
       image_ptr& get_image(const std::string& file_name);
 

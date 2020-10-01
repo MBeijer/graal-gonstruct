@@ -17,11 +17,11 @@ Graal::level::level(int fill_tile): m_unique_npc_id_counter(0) {
   g_assert(Graal::tile_invalid.index == Graal::tile::invalid_index);
 }
 
-int Graal::level::get_width() const {
+int Graal::level::get_width() {
   return 64;
 }
 
-int Graal::level::get_height() const {
+int Graal::level::get_height() {
   return 64;
 }
 
@@ -117,7 +117,7 @@ Graal::level* Graal::load_nw_level(const boost::filesystem::path& path) {
     throw std::runtime_error("load_nw_level() failed: Version mismatch (" + version + " != " + NW_LEVEL_VERSION + ")");
   }
 
-  Graal::level* level = new Graal::level();
+  auto* level = new Graal::level();
   while(!file.eof()) {
     std::string type = read<std::string>(file);
 
@@ -162,7 +162,7 @@ Graal::level* Graal::load_nw_level(const boost::filesystem::path& path) {
       std::string line;
       while (true) {
         line = read_line(file);
-        
+
         // Protect against infinite loop in malformed levels
         if (line == "SIGNEND" || file.eof())
           break;
@@ -204,7 +204,7 @@ Graal::level* Graal::load_nw_level(const boost::filesystem::path& path) {
 
   file.close();
   return level;
-  
+
 }
 
 void Graal::save_nw_level(const Graal::level* level, const boost::filesystem::path& path) {
@@ -230,7 +230,7 @@ void Graal::save_nw_level(const Graal::level* level, const boost::filesystem::pa
         Graal::tile tile = tiles.get_tile(x, y);
         if (tile == Graal::tile_transparent) {
           if (!data.empty()) {
-            chunks.push_back(std::pair<int, std::string>(current_start, data));
+            chunks.emplace_back(current_start, data);
             current_start = x;
             data.clear();
           }
@@ -240,10 +240,10 @@ void Graal::save_nw_level(const Graal::level* level, const boost::filesystem::pa
           continue;
         }
 
-        data += helper::format_base64(tile.index);      
+        data += helper::format_base64(tile.index);
       }
       if (!data.empty())
-        chunks.push_back(std::pair<int, std::string>(current_start, data));
+        chunks.emplace_back(current_start, data);
 
       /* Draw one BOARD entry for each chunk so transparent tile-data is culled */
       std::list<std::pair<int, std::string> >::iterator iter, end = chunks.end();

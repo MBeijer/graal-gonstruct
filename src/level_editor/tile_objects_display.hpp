@@ -9,8 +9,8 @@ namespace Graal {
   namespace level_editor {
     class tile_objects_display: public Gtk::VBox {
     public:
-      tile_objects_display(level_editor::preferences& preferences);
-      virtual ~tile_objects_display();
+      explicit tile_objects_display(level_editor::preferences& preferences);
+      ~tile_objects_display() override;
 
       void set();
       void get();
@@ -23,7 +23,7 @@ namespace Graal {
       signal_tiles_selected_type& signal_tiles_selected();
       typedef sigc::signal<tile_buf> signal_create_tile_object_type;
       signal_create_tile_object_type& signal_create_tile_object();
-      
+
       void on_mouse_pressed(GdkEventButton* event);
     protected:
       preferences& m_preferences;

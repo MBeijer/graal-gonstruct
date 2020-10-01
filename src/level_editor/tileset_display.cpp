@@ -5,11 +5,11 @@
 using namespace Graal;
 
 // scales real positions to tile positions
-inline int level_editor::tileset_display::to_tiles_x(int x) {
+inline int level_editor::tileset_display::to_tiles_x(int x) const {
   return (x + m_tile_width / 2) / m_tile_width;
 }
 
-inline int level_editor::tileset_display::to_tiles_y(int y) {
+inline int level_editor::tileset_display::to_tiles_y(int y) const {
   return (y + m_tile_height / 2) / m_tile_width;
 }
 
@@ -60,7 +60,7 @@ void level_editor::tileset_display::update_tileset(const std::string& level_name
       }
     }
   }
-  
+
   Cairo::RefPtr<Cairo::ImageSurface> main;
   if (main_iter == m_preferences.tilesets.end()) {
     // No matching main tileset, use default image and display error
@@ -274,7 +274,7 @@ void level_editor::tileset_display::copy_selection() {
     }
   }
 
-  const int drag_x = helper::bound_by(try_drag_x, 0, w); 
+  const int drag_x = helper::bound_by(try_drag_x, 0, w);
   const int drag_y = helper::bound_by(try_drag_y, 0, h);
 
   m_signal_tiles_selected(selection, drag_x, drag_y);

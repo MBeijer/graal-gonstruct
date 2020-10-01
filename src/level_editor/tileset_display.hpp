@@ -19,8 +19,8 @@ namespace Graal {
       void set_tile_size(int tile_width, int tile_height);
       void update_tileset(const std::string& level_name);
 
-      inline int to_tiles_x(int x);
-      inline int to_tiles_y(int y);
+      inline int to_tiles_x(int x) const;
+      inline int to_tiles_y(int y) const;
 
       typedef sigc::signal<void, const std::string&> signal_status_update_type;
       signal_status_update_type& signal_status_update();
@@ -34,7 +34,7 @@ namespace Graal {
       typedef sigc::signal<void, tile_buf&, int, int> signal_tiles_selected_type;
       signal_tiles_selected_type& signal_tiles_selected();
     protected:
-      virtual bool on_expose_event(GdkEventExpose* event);
+      bool on_expose_event(GdkEventExpose* event) override;
       void on_button_pressed(GdkEventButton* event);
       void on_button_released(GdkEventButton* event);
       void on_button_motion(GdkEventMotion* event);
@@ -45,7 +45,7 @@ namespace Graal {
 
       preferences& m_preferences;
       image_cache& m_image_cache;
-      int m_tile_width, m_tile_height;
+      int m_tile_width{}, m_tile_height{};
 
       tile_buf m_selection;
       bool m_selecting;

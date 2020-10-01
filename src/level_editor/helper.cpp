@@ -11,12 +11,12 @@ std::string helper::read_line(std::ifstream& stream) {
   std::getline(stream, line);
   return Graal::helper::strip(line, "\r\n");
 }
-  
+
 std::string helper::strip(const std::string& str, const char* ws) {
   std::string::size_type first, last, length;
   first = str.find_first_not_of(ws);
   last = str.find_last_not_of(ws);
-  
+
   if (first == std::string::npos)
     first = 0;
 

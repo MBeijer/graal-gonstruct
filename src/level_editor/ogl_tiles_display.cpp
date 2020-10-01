@@ -44,7 +44,7 @@ texture_info Graal::level_editor::load_texture_from_surface(Cairo::RefPtr<Cairo:
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-  texture_info info;
+  texture_info info{};
   info.index = id;
 
   unsigned int width, height;
@@ -54,7 +54,7 @@ texture_info Graal::level_editor::load_texture_from_surface(Cairo::RefPtr<Cairo:
   // If there's not NPOT texture support, scale texture size up
   if (!GLEW_ARB_texture_non_power_of_two) {
     std::cout << "Warning: No ARB_texture_non_power_of_two support" << std::endl;
-    
+
     width = get_nearest_pot(width);
     height = get_nearest_pot(height);
   }
@@ -75,7 +75,7 @@ texture_info Graal::level_editor::load_texture_from_surface(Cairo::RefPtr<Cairo:
     info.image_width, info.image_height,
     GL_BGRA, GL_UNSIGNED_BYTE,
     surface->get_data());
-  
+
   GLenum err = glGetError();
   if (err)
     throw std::runtime_error((boost::format("Loading texture failed: %1%") % err).str());
@@ -85,7 +85,7 @@ texture_info Graal::level_editor::load_texture_from_surface(Cairo::RefPtr<Cairo:
 
 namespace {
   // A little wrapper for the GTK C signal callback from set-scroll-adjustments
-  static void ogl_tiles_display_set_adjustments(void* /*display_gobj*/, GtkAdjustment* hadj, GtkAdjustment* vadj, ogl_tiles_display* display) {
+  void ogl_tiles_display_set_adjustments(void* /*display_gobj*/, GtkAdjustment* hadj, GtkAdjustment* vadj, ogl_tiles_display* display) {
     display->set_adjustments(
       Glib::wrap(hadj),
       Glib::wrap(vadj));
@@ -110,8 +110,8 @@ void ogl_tiles_display::set_adjustments(Gtk::Adjustment* hadjustment, Gtk::Adjus
 
 
 ogl_tiles_display::ogl_tiles_display():
-  m_hadjustment(0),
-  m_vadjustment(0),
+  m_hadjustment(nullptr),
+  m_vadjustment(nullptr),
   m_tile_width(16), // TODO: take a parameter for this?
   m_tile_height(16)
 {
@@ -132,7 +132,7 @@ ogl_tiles_display::ogl_tiles_display():
       G_OBJECT_CLASS_TYPE(klass),
       static_cast<GSignalFlags>(G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION),
       0,
-      NULL, NULL,
+      nullptr, nullptr,
       _gtk_VOID__OBJECT_OBJECT,
       GTK_TYPE_NONE, 2,
       GTK_TYPE_ADJUSTMENT,
@@ -211,7 +211,7 @@ void ogl_tiles_display::on_gl_realize() {
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  
+
   set_surface_size();
 
   glMatrixMode(GL_PROJECTION);
@@ -276,7 +276,7 @@ void ogl_tiles_display::load_tileset(Cairo::RefPtr<Cairo::ImageSurface>& surface
   glEnable(GL_TEXTURE_2D);
 
   m_tileset = load_texture_from_surface(surface, m_tileset.index);
-  
+
   invalidate();
 }
 
@@ -337,7 +337,7 @@ void ogl_tiles_display::invalidate() {
 void ogl_tiles_display::set_tile_size(int tile_width, int tile_height) {
   m_tile_width = tile_width;
   m_tile_height = tile_height;
-  
+
   invalidate();
 }
 

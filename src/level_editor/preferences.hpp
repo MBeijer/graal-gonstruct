@@ -20,13 +20,13 @@ namespace Graal {
       tile_objects_type tile_object_groups;
       std::string graal_dir;
       tileset_list_type tilesets;
-      int default_tile;
-      bool selection_border_while_dragging;
-      bool selection_background;
-      bool sticky_tile_selection;
-      bool hide_npcs, hide_signs, hide_links;
-      bool fade_layers;
-      bool remember_default_tile;
+      int default_tile{};
+      bool selection_border_while_dragging{};
+      bool selection_background{};
+      bool sticky_tile_selection{};
+      bool hide_npcs{}, hide_signs{}, hide_links{};
+      bool fade_layers{};
+      bool remember_default_tile{};
       bool use_graal_cache;
 
       tileset add_tileset(const std::string& name, const std::string& prefix);
@@ -35,10 +35,10 @@ namespace Graal {
       void load_tile_objects();
       void save_tile_objects(const std::string& group);
 
-      virtual ~preferences() {}
+      ~preferences() override = default;
     protected:
-      virtual void serialize();
-      virtual void deserialize();
+      void serialize() override;
+      void deserialize() override;
     };
   }
 }

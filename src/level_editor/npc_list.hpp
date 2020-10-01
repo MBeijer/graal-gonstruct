@@ -10,12 +10,12 @@ namespace Graal {
 
     class npc_list: public Gtk::Dialog {
     public:
-      npc_list(window& _window);
+      explicit npc_list(window& _window);
 
       void get();
     protected:
-      void on_show();
-      void on_response(int response_id);
+      void on_show() override;
+      void on_response(int response_id) override;
       void on_edit_clicked();
       void on_delete_clicked();
 
@@ -28,7 +28,7 @@ namespace Graal {
         npc_columns() {
           add(iter); add(image); add(x); add(y);
         }
-        virtual ~npc_columns();
+        ~npc_columns() override;
 
         Gtk::TreeModelColumn<level::npc_list_type::iterator> iter;
         Gtk::TreeModelColumn<Glib::ustring> image;

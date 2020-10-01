@@ -9,8 +9,8 @@ namespace Graal {
     class window;
     class edit_link: public Gtk::Dialog {
     public:
-      edit_link(window& _window);
-      virtual ~edit_link();
+      explicit edit_link(window& _window);
+      ~edit_link() override;
 
       void get(const link& _link);
       link get_link();
@@ -29,12 +29,12 @@ namespace Graal {
 
     class link_list: public Gtk::Dialog {
     public:
-      link_list(window& _window);
+      explicit link_list(window& _window);
 
       void get();
     protected:
-      void on_show();
-      void on_response(int response_id);
+      void on_show() override;
+      void on_response(int response_id) override;
       void on_edit_clicked();
       void on_delete_clicked();
 
@@ -47,7 +47,7 @@ namespace Graal {
         link_columns() {
           add(iter); add(destination); add(new_x); add(new_y);
         }
-        virtual ~link_columns();
+        ~link_columns() override;
 
         Gtk::TreeModelColumn<level::link_list_type::iterator> iter;
         Gtk::TreeModelColumn<Glib::ustring> destination;

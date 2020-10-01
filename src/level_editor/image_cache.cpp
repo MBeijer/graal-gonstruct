@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <algorithm>
 
 #include <gtkmm.h>
@@ -82,7 +81,7 @@ image_cache::image_ptr& image_cache::get_image(const std::string& file_name) {
     } catch (std::exception&) {}
   }
   return image;
-} 
+}
 
 void image_cache::clear_cache() {
   m_cache.clear();

@@ -46,9 +46,9 @@ namespace Graal {
 
       Cairo::RefPtr<Cairo::ImageSurface> get_image(const std::string& file_name);
 
-      window(preferences& _prefs);
+      explicit window(preferences& _prefs);
 
-      virtual ~window();
+      ~window() override;
 
       default_tile_display default_tile;
       tileset_map_type tilesets;
@@ -68,12 +68,12 @@ namespace Graal {
       bool save_current_page();
       bool save_current_page_as();
 
-      std::auto_ptr<level_display> create_level_display();
+      std::unique_ptr<level_display> create_level_display();
     protected:
       class tab_label: public Gtk::HBox {
       public:
-        tab_label(const Glib::ustring& label);
-        virtual ~tab_label();
+        explicit tab_label(const Glib::ustring& label);
+        ~tab_label() override;
         typedef Glib::SignalProxy0<void> signal_proxy_close;
 
         signal_proxy_close close_event();
@@ -105,7 +105,7 @@ namespace Graal {
       int m_tile_width;
       int m_tile_height;
 
-      virtual bool on_delete_event(GdkEventAny* event);
+      bool on_delete_event(GdkEventAny* event) override;
 
       void on_action_about();
       void on_close_level_clicked(Gtk::ScrolledWindow& scrolled, level_display& display);

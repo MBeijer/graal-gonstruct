@@ -4,7 +4,7 @@ GLArea::GLArea(int* attrList) {
   create_gl_area(attrList);
 }
 
-GLArea::~GLArea() {}
+GLArea::~GLArea() = default;
 
 void GLArea::create_gl_area(int* attrList) {
   GtkWidget* gtkglarea = gtk_gl_area_new(attrList);

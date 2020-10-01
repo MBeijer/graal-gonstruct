@@ -20,7 +20,7 @@ texture_info load_texture_from_surface(Cairo::RefPtr<Cairo::ImageSurface>& surfa
 class ogl_tiles_display: public GLArea {
 public:
   ogl_tiles_display();
-  virtual ~ogl_tiles_display() {}
+  ~ogl_tiles_display() override = default;
 
   void set_tile_size(int tile_width, int tile_height);
   void set_tileset_surface(const Cairo::RefPtr<Cairo::ImageSurface>& surface);
@@ -53,9 +53,9 @@ protected:
   Gtk::Adjustment* m_hadjustment;
   Gtk::Adjustment* m_vadjustment;
 
-  void on_gl_realize();
-  bool on_gl_expose_event(GdkEventExpose* event);
-  bool on_gl_configure_event(GdkEventConfigure* event);
+  void on_gl_realize() override;
+  bool on_gl_expose_event(GdkEventExpose* event) override;
+  bool on_gl_configure_event(GdkEventConfigure* event) override;
 
   virtual void draw_tile(const tile& _tile, int x, int y);
   virtual void draw_all();
@@ -64,7 +64,7 @@ protected:
 
   sigc::connection m_connection_idle;
 
-  texture_info m_tileset;
+  texture_info m_tileset{};
   int m_tile_width, m_tile_height;
 
   tile_buf m_tile_buf;

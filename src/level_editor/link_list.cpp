@@ -46,7 +46,7 @@ level_editor::edit_link::edit_link(window& _window)
 
   source_coords->set_border_width(5);
   frame_source->add(*source_coords);
-  
+
   get_vbox()->pack_start(*frame_source);
 
   // destination controls
@@ -67,7 +67,7 @@ level_editor::edit_link::edit_link(window& _window)
   show_all_children();
 }
 
-level_editor::edit_link::~edit_link() {}
+level_editor::edit_link::~edit_link() = default;
 
 Graal::link level_editor::edit_link::get_link() {
   link new_link;
@@ -84,10 +84,10 @@ Graal::link level_editor::edit_link::get_link() {
 }
 
 void level_editor::edit_link::get(const link& _link) {
-  m_edit_x.set_text(boost::lexical_cast<std::string>(_link.x));
-  m_edit_y.set_text(boost::lexical_cast<std::string>(_link.y));
-  m_edit_width.set_text(boost::lexical_cast<std::string>(_link.width));
-  m_edit_height.set_text(boost::lexical_cast<std::string>(_link.height));
+  m_edit_x.set_text(std::to_string(_link.x));
+  m_edit_y.set_text(std::to_string(_link.y));
+  m_edit_width.set_text(std::to_string(_link.width));
+  m_edit_height.set_text(std::to_string(_link.height));
 
   m_edit_destination.set_text(_link.destination);
   m_edit_new_x.set_text(_link.new_x);
@@ -117,9 +117,9 @@ level_editor::link_list::link_list(window& _window)
   Gtk::Button* button_delete = Gtk::manage(new Gtk::Button("Delete"));
   button_delete->signal_clicked().connect(sigc::mem_fun(this, &link_list::on_delete_clicked));
   get_action_area()->pack_start(*button_delete);
-  
+
   add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-  
+
   set_default_size(400, 300);
 
   show_all_children();
@@ -141,7 +141,7 @@ void level_editor::link_list::on_edit_clicked() {
   Gtk::TreeModel::iterator iter = selection->get_selected();
   if (iter) {
     Gtk::TreeRow row = *iter;
-    
+
     // get selected link
     link& _link = *row.get_value(columns.iter);
     edit_link edit_window(m_window);
@@ -186,4 +186,4 @@ void level_editor::link_list::get() {
   }
 }
 
-level_editor::link_list::link_columns::~link_columns() {}
+level_editor::link_list::link_columns::~link_columns() = default;

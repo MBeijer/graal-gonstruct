@@ -78,7 +78,7 @@ preferences::preferences():
 
 void preferences::serialize() {
   std::ostringstream str;
-  
+
   m_values["graal_directory"] = graal_dir;
 
   m_values["selection_border_while_dragging"]
@@ -92,14 +92,14 @@ void preferences::serialize() {
 
   m_values["fade_layers"]
     = fade_layers ? "true" : "false";
-  
+
   m_values["use_graal_cache"]
     = use_graal_cache ? "true" : "false";
 
   if (default_tile == -1) { // TODO: see window.cpp TODO re this
     m_values.erase("default_tile");
   } else {
-    m_values["default_tile"] = boost::lexical_cast<std::string>(default_tile);
+    m_values["default_tile"] = std::to_string(default_tile);
   }
 
   // write tilesets
@@ -146,7 +146,7 @@ void preferences::deserialize() {
   if (iter != m_values.end()) {
     fade_layers = (iter->second == "true");
   }
- 
+
   iter = m_values.find("use_graal_cache");
   if (iter != m_values.end()) {
     use_graal_cache = (iter->second == "true");
@@ -230,19 +230,19 @@ void preferences::save_tile_objects(const std::string& group) {
 
   std::string file_name = "objects" + group + ".txt";
   boost::filesystem::path group_file(tile_objects_path / file_name);
-  
+
   std::ofstream stream(group_file.string().c_str());
   stream << "GOBJSET01" << std::endl;
 
   preferences::tile_object_group_type object_group = tile_object_groups[group];
-  preferences::tile_object_group_type::iterator it = object_group.begin(), end = object_group.end();
+  auto it = object_group.begin(), end = object_group.end();
 
   for (; it != end; ++it) {
     tile_buf& buf = it->second;
     stream << std::endl;
     stream << "OBJECT " << buf.get_width() << " " << buf.get_height() << " "
            << it->first << std::endl;
-    
+
     for (int y = 0; y < buf.get_height(); ++y) {
       for (int x = 0; x < buf.get_width(); ++x) {
         stream << helper::format_base64(buf.get_tile(x, y).index);

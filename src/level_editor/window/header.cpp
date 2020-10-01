@@ -112,9 +112,9 @@ level_editor::header::header():
     Gtk::Action::create("LevelScreenshot",
                         Gtk::Stock::ZOOM_FIT, "Screenshot",
                         "Take a screenshot of the level.")),
-  
+
   action_help(Gtk::Action::create("HelpMenu", "_Help")),
-  action_help_about(Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT)) 
+  action_help_about(Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT))
 
 {
   group_level_actions->add(action_file_save);
@@ -130,7 +130,7 @@ level_editor::header::header():
   group_level_actions->add(action_level_play);
 #endif
   group_level_actions->add(action_level_screenshot);
-  
+
   group_level_actions->add(action_edit_undo, Gtk::AccelKey("<control>z"));
   group_level_actions->add(action_edit_redo, Gtk::AccelKey("<control>y"));
   group_level_actions->add(action_edit_cut);
@@ -152,16 +152,16 @@ level_editor::header::header():
   m_ui_manager->add_ui_from_string(ui_xml);
   m_ui_manager->insert_action_group(group_level_actions);
   m_ui_manager->insert_action_group(actions);
-  
-  m_menubar = static_cast<Gtk::MenuBar*>(m_ui_manager->get_widget("/MenuBar"));
+
+  m_menubar = dynamic_cast<Gtk::MenuBar*>(m_ui_manager->get_widget("/MenuBar"));
   pack_start(*m_menubar, Gtk::PACK_SHRINK);
-  
-  m_toolbar = static_cast<Gtk::Toolbar*>(m_ui_manager->get_widget("/ToolBar"));
+
+  m_toolbar = dynamic_cast<Gtk::Toolbar*>(m_ui_manager->get_widget("/ToolBar"));
   m_toolbar->set_toolbar_style(Gtk::TOOLBAR_ICONS);
   pack_start(*m_toolbar, Gtk::PACK_SHRINK);
 }
 
-level_editor::header::~header() {}
+level_editor::header::~header() = default;
 
 Gtk::MenuBar& level_editor::header::get_menubar() {
   return *m_menubar;
@@ -175,6 +175,6 @@ Glib::RefPtr<Gtk::AccelGroup> level_editor::header::get_accel_group() {
   return m_ui_manager->get_accel_group();
 }
 
-const Glib::RefPtr<Gtk::AccelGroup> level_editor::header::get_accel_group() const {
+Glib::RefPtr<Gtk::AccelGroup> level_editor::header::get_accel_group() const {
   return m_ui_manager->get_accel_group();
 }

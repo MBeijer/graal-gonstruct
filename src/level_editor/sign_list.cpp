@@ -60,7 +60,7 @@ level_editor::sign_list::sign_list(window& _window)
   scroll_text->add(m_text_view);
   m_text_view.set_indent(3);
   get_vbox()->pack_start(*scroll_text);
-  
+
   add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 
   m_tree_view.get_selection()->signal_changed().connect_notify(
@@ -107,7 +107,7 @@ void level_editor::sign_list::on_create_clicked() {
 
   m_window.get_current_level()->signs.push_back(new_sign);
   get();
-  
+
   // select the last item and scroll to it
   Gtk::TreeIter iter_last = m_list_store->children()[m_list_store->children().size() - 1];
   m_tree_view.get_selection()->select(iter_last);
@@ -150,7 +150,7 @@ void level_editor::sign_list::get() {
     (*row)[columns.y] = iter->y;
     (*row)[columns.text] = iter->text; // TODO: unicode
     index ++;
-  } 
+  }
 }
 
 void level_editor::sign_list::set() {
@@ -212,4 +212,4 @@ void level_editor::sign_list::on_text_changed() {
   set();
 }
 
-level_editor::sign_list::sign_columns::~sign_columns() {}
+level_editor::sign_list::sign_columns::~sign_columns() = default;

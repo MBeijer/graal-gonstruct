@@ -20,14 +20,14 @@ namespace Graal {
 
       typedef sigc::signal<void, preference_changes>
           signal_preferences_changed_type;
-      preferences_display(preferences& _prefs);
+      explicit preferences_display(preferences& _prefs);
 
       void update_controls();
 
       signal_preferences_changed_type& signal_preferences_changed();
 
     private:
-      virtual void on_response(int response_id);
+      void on_response(int response_id) override;
 
       void apply();
 

@@ -22,7 +22,7 @@ public:
   typedef std::map<std::pair<int, int>, bool> unsaved_level_map_type;
 
   level_display(preferences& _prefs, image_cache& cache, int default_tile_index = 0);
-  virtual ~level_display() {}
+  ~level_display() override = default;
 
   void set_default_tile(int tile_index);
 
@@ -37,7 +37,7 @@ public:
   void delete_selection();
   void lift_selection();
   void grab_selection();
-  
+
   // Returns a list of NPC references under the given screen position
   std::list<level_map::npc_ref> get_npcs_at_pos(int pixel_x, int pixel_y);
 
@@ -54,7 +54,7 @@ public:
   void load_gmap(filesystem& fs, const boost::filesystem::path& file_path);
 
   void set_selection(const level_map::npc_ref& npc);
-  bool in_selection(int x, int y);
+  bool in_selection(int x, int y) const;
 
   // Return the currently active level
   const boost::shared_ptr<level>& get_current_level();
@@ -79,8 +79,8 @@ public:
   inline int to_tiles_y(int y);
 
   // TODO: no
-  bool npc_selected() { return (selected_npc.id != 0); }
-  bool is_selecting() { return m_selecting; }
+  bool npc_selected() const { return (selected_npc.id != 0); }
+  bool is_selecting() const { return m_selecting; }
   bool has_selection() { return !selection.empty() || m_select_width > 0 || npc_selected(); }
 
   level_editor::undo_buffer undo_buffer;
@@ -113,21 +113,21 @@ public:
   unsaved_level_map_type& get_unsaved_levels() { return m_unsaved_levels; }
 
   void set_active_layer(int layer);
-  int get_active_layer() { return m_active_layer; }
+  int get_active_layer() const { return m_active_layer; }
 
-  virtual tile_buf& get_tile_buf();
+  tile_buf& get_tile_buf() override;
   Cairo::RefPtr<Cairo::ImageSurface> render_level();
 
   void set_layer_visibility(std::size_t layer, bool visible);
   bool get_layer_visibility(std::size_t layer);
 
-  void set_surface_size();
+  void set_surface_size() override;
 protected:
   void draw_tiles(level* current_level);
   void draw_selection();
   void draw_misc(level* current_level);
-  virtual void draw_all();
-  
+  void draw_all() override;
+
   void setup_buffers();
 
   void draw_rectangle(float x, float y, float width, float height, float r, float g, float b, float a = 1.0, bool fill = false);
@@ -136,7 +136,7 @@ protected:
   void on_button_released(GdkEventButton* event);
   void on_button_motion(GdkEventMotion* event);
   void on_mouse_leave(GdkEventCrossing* event);
-  bool on_key_press_event(GdkEventKey* event);
+  bool on_key_press_event(GdkEventKey* event) override;
 
   void on_level_changed(int x, int y);
 
@@ -155,9 +155,9 @@ protected:
   // drag stuff
   bool m_dragging;
   // in pixel:
-  int m_drag_start_x, m_drag_start_y;
+  int m_drag_start_x{}, m_drag_start_y{};
   // mouse offset from the selection origin
-  int m_drag_mouse_x, m_drag_mouse_y;
+  int m_drag_mouse_x{}, m_drag_mouse_y{};
 
   layer_visibility_list_type m_layer_visibility;
 
@@ -187,7 +187,7 @@ private:
   };
 
   struct vertex_texcoord {
-    vertex_texcoord() {}
+    vertex_texcoord() = default;
     vertex_texcoord(float _u, float _v): u(_u), v(_v) {}
     float u, v;
   };

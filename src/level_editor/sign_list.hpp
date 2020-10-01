@@ -10,13 +10,13 @@ namespace Graal {
 
     class sign_list: public Gtk::Dialog {
     public:
-      sign_list(window& _window);
+      explicit sign_list(window& _window);
 
       void get();
       void set();
     protected:
-      void on_show();
-      void on_response(int response_id);
+      void on_show() override;
+      void on_response(int response_id) override;
       void on_create_clicked();
       void on_delete_clicked();
       void on_sign_changed();
@@ -38,7 +38,7 @@ namespace Graal {
         sign_columns() {
           add(iter); add(index); add(x); add(y); add(text);
         }
-        virtual ~sign_columns();
+        ~sign_columns() override;
 
         Gtk::TreeModelColumn<level::sign_list_type::iterator> iter;
         Gtk::TreeModelColumn<int> index;

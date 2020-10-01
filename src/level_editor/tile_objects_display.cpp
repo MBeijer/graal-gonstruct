@@ -14,10 +14,10 @@ level_editor::tile_objects_display::tile_objects_display(level_editor::preferenc
   table.attach(m_object_label, 0, 1, 2, 3, Gtk::FILL|Gtk::SHRINK, Gtk::FILL|Gtk::SHRINK, 0, 3);
   table.attach(m_objects, 0, 2, 3, 4, Gtk::EXPAND | Gtk::SHRINK | Gtk::FILL);
 
-  Gtk::Entry& groups_entry = *static_cast<Gtk::Entry*>(m_groups.get_child());
+  Gtk::Entry& groups_entry = *dynamic_cast<Gtk::Entry*>(m_groups.get_child());
   groups_entry.set_editable(false);
 
-  Gtk::Entry& objects_entry = *static_cast<Gtk::Entry*>(m_objects.get_child());
+  Gtk::Entry& objects_entry = *dynamic_cast<Gtk::Entry*>(m_objects.get_child());
   objects_entry.set_editable(false);
 
   Gtk::ScrolledWindow& scrolled = *Gtk::manage(new Gtk::ScrolledWindow());
@@ -82,7 +82,7 @@ level_editor::tile_objects_display::tile_objects_display(level_editor::preferenc
   show_all_children();
 }
 
-level_editor::tile_objects_display::~tile_objects_display() {}
+level_editor::tile_objects_display::~tile_objects_display() = default;
 
 void level_editor::tile_objects_display::set() {
 }
@@ -120,7 +120,7 @@ void level_editor::tile_objects_display::on_group_changed() {
       m_preferences.tile_object_groups.end()) {
     return;
   }
-  level_editor::preferences::tile_object_group_type& object_group = 
+  level_editor::preferences::tile_object_group_type& object_group =
       m_preferences.tile_object_groups[m_groups.get_active_text()];
   level_editor::preferences::tile_object_group_type::iterator it, end = object_group.end();
   it = object_group.begin();
@@ -151,7 +151,7 @@ void level_editor::tile_objects_display::on_object_changed() {
     return;
   }
 
-  level_editor::preferences::tile_object_group_type& object_group = 
+  level_editor::preferences::tile_object_group_type& object_group =
       m_preferences.tile_object_groups[m_groups.get_active_text()];
 
   // Abort if object doesn't exist
@@ -230,7 +230,7 @@ void level_editor::tile_objects_display::on_object_new_clicked() {
 }
 
 void level_editor::tile_objects_display::on_object_delete_clicked() {
-  level_editor::preferences::tile_object_group_type& object_group = 
+  level_editor::preferences::tile_object_group_type& object_group =
       m_preferences.tile_object_groups[m_groups.get_active_text()];
 
   object_group.erase(m_objects.get_active_text());

@@ -9,7 +9,7 @@ namespace Graal {
   namespace level_editor {
     class tiles_display: public basic_tiles_display {
     public:
-      virtual tile_buf& get_tile_buf() { return m_tile_buf; }
+      tile_buf& get_tile_buf() override { return m_tile_buf; }
 
       void set_tile_buf(tile_buf& buf) {
         m_tile_buf.swap(buf);
@@ -20,7 +20,7 @@ namespace Graal {
     protected:
       tile_buf m_tile_buf;
 
-      virtual bool on_expose_event(GdkEventExpose* event);
+      bool on_expose_event(GdkEventExpose* event) override;
     };
   }
 }

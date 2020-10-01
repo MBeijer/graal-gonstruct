@@ -97,7 +97,7 @@ namespace Graal {
     bool operator==(const Graal::npc& o) const {
       return id == o.id && x == o.x && y == o.y && image == o.image && script == o.script;
     }
-    
+
     bool operator!=(const Graal::npc& o) const {
       return !operator==(o);
     }
@@ -126,14 +126,14 @@ namespace Graal {
 
   class level {
   public:
-    level(int fill_tile = 0);
+    explicit level(int fill_tile = 0);
     typedef std::list<link> link_list_type;
     typedef std::list<sign> sign_list_type;
     typedef std::list<npc> npc_list_type;
     typedef std::vector<tile_buf> layers_list_type;
 
-    int get_width() const;
-    int get_height() const;
+    static int get_width() ;
+    static int get_height() ;
 
     Graal::npc& add_npc();
     Graal::npc& add_npc(Graal::npc npc);
@@ -156,7 +156,7 @@ namespace Graal {
     npc_list_type npcs;
   protected:
     int m_unique_npc_id_counter;
-    int m_fill_tile;
+    int m_fill_tile{};
   };
 
   level* load_nw_level(const boost::filesystem::path& path);

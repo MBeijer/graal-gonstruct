@@ -11,7 +11,7 @@ namespace Graal {
     class edit_tileset: public Gtk::Dialog {
     public:
       edit_tileset();
-      virtual ~edit_tileset();
+      ~edit_tileset() override;
 
       void get(const tileset& _tileset);
       void set(tileset& _tileset);
@@ -39,8 +39,8 @@ namespace Graal {
 
       void get();
     protected:
-      void on_show();
-      void on_response(int response_id);
+      void on_show() override;
+      void on_response(int response_id) override;
       void on_edit_clicked();
       void on_delete_clicked();
       void on_new_clicked();
@@ -56,7 +56,7 @@ namespace Graal {
         tileset_columns() {
           add(iter); add(active); add(image); add(prefix); add(main); add(x); add(y);
         }
-        virtual ~tileset_columns();
+        ~tileset_columns() override;
 
         Gtk::TreeModelColumn<tileset_list_type::iterator> iter;
         Gtk::TreeModelColumn<bool> active;

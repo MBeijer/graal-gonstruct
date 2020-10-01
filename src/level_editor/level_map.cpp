@@ -10,13 +10,13 @@ using namespace Graal;
 using namespace Graal::level_editor;
 using namespace Graal::helper;
 
-level_map_source::~level_map_source() {}
+level_map_source::~level_map_source() = default;
 
 std::string level_map_source::get_level_name(int x, int y) {
   // Return an empty name if the index is out of bounds
   if (x >= get_width() || y >= get_height())
     return "";
-  
+
   return m_level_names[x][y];
 }
 
@@ -82,7 +82,7 @@ gmap_level_map_source::gmap_level_map_source(filesystem& _filesystem, const boos
         // Protect against malformed level list
         if (line == "LEVELNAMESEND" || file.eof())
           break;
-        
+
         int x = 0;
         std::vector<std::string> level_names(Graal::csv_to_array(line));
         end = level_names.end();
@@ -167,7 +167,7 @@ level_map::level_map():
   /* TODO: not sure where else to set this, it's Graal specific and not
    * mentioned in any level file or GMap. For what it's worth, levels could
    * be of arbitrary size, but that'd make things a lot harder */
-  set_level_size(64, 64); 
+  set_level_size(64, 64);
 }
 
 void level_map::set_level_source(const boost::shared_ptr<level_map_source>& source) {
@@ -340,14 +340,14 @@ npc* level_map::move_npc(level_map::npc_ref& ref, float new_x, float new_y) {
 
     m_signal_level_changed(ref.level_x, ref.level_y);
   }
-  
+
   m_signal_level_changed(new_level_x, new_level_y);
 
   // Set the correct position inside the level
   new_npc->set_level_x(new_tiles_x);
   new_npc->set_level_y(new_tiles_y);
 
-  
+
   return new_npc;
 }
 
@@ -393,7 +393,7 @@ void level_map::set_level_size(int width, int height) {
 
 level_map* level_map::load_from_gmap(filesystem& _filesystem, const boost::filesystem::path& _file_name) {
   boost::shared_ptr<gmap_level_map_source> source(new gmap_level_map_source(_filesystem, _file_name));
-  level_map* map(new level_map());
+  auto* map(new level_map());
 
   map->set_level_source(source);
   map->set_size(source->get_width(), source->get_height());

@@ -65,7 +65,7 @@ level_display::level_display(
   m_select_height = 0;
 
   m_active_layer = 0;
-  
+
   m_position_buffer = 0;
   m_texcoord_buffer = 0;
 
@@ -109,7 +109,7 @@ void level_display::set_level_map(level_map_source* level_source) {
 }
 
 void level_display::new_level(int fill_tile = 0) {
-  level* new_level = new Graal::level(fill_tile);
+  auto* new_level = new Graal::level(fill_tile);
   // The level name needs to be set by the host
   set_level_map(new single_level_map_source(""));
   m_level_map->set_level(new_level);
@@ -188,18 +188,18 @@ void level_display::clear_selection() {
   m_selecting = false;
   m_dragging = false;
   m_select_width = m_select_height = 0;
-  
+
   invalidate();
 }
 
-bool level_display::in_selection(int x, int y) {
+bool level_display::in_selection(int x, int y) const {
   return x >= m_select_x && x <= (m_select_x + m_select_width) &&
          y >= m_select_y && y <= (m_select_y + m_select_height);
 }
 
 void level_display::set_selection(const level_map::npc_ref& ref) {
   npc& npc = *m_level_map->get_npc(ref);
-  
+
   // Set selection origin at the NPC's global position
   float npc_x, npc_y;
   m_level_map->get_global_npc_position(ref, npc_x, npc_y);
@@ -212,7 +212,7 @@ void level_display::set_selection(const level_map::npc_ref& ref) {
       m_image_cache.get_image(npc.image);
   m_select_width = surface->get_width();
   m_select_height = surface->get_height();
-  
+
   invalidate();
 }
 
@@ -241,7 +241,7 @@ Cairo::RefPtr<Cairo::ImageSurface> level_display::render_level() {
   glReadPixels(0, 0, get_width(), get_height(),
                GL_BGRA, GL_UNSIGNED_BYTE,
                surface->get_data());
-  
+
   // Flip the image along the y-axis, since OpenGL's images are too
   Cairo::RefPtr<Cairo::Context> ct = Cairo::Context::create(dest);
   Cairo::Matrix flipy(1, 0, 0, -1, 0, get_height());
@@ -310,7 +310,7 @@ void level_display::on_button_motion(GdkEventMotion*) {
       m_drag_start_x = tx * m_tile_width;
       m_drag_start_y = ty * m_tile_height;
     }
-    
+
     invalidate();
   }
 
@@ -355,7 +355,7 @@ void level_display::on_button_pressed(GdkEventButton* event) {
         }
         m_dragging = false;
         m_selecting = false;
-        
+
         set_selection(selected_npc);
 
         return invalidate();
@@ -432,7 +432,7 @@ void level_display::on_button_pressed(GdkEventButton* event) {
         }
       } else if (!npc_selected() && selection.empty()) {
         lift_selection();
-      } 
+      }
 
       // start dragging
       m_dragging = true;
@@ -463,7 +463,7 @@ void level_display::on_button_pressed(GdkEventButton* event) {
         return invalidate();
 
       // otherwise select tiles only with left mouse button
-      if (!npc_selected() && event->button == 1) {   
+      if (!npc_selected() && event->button == 1) {
         m_select_x = tile_x * m_tile_width;
         m_select_y = tile_y * m_tile_height;
 
@@ -474,7 +474,7 @@ void level_display::on_button_pressed(GdkEventButton* event) {
       }
     }
   }
-  
+
   invalidate();
 }
 
@@ -519,7 +519,7 @@ std::list<level_map::npc_ref> level_display::get_npcs_at_pos(int pixel_x, int pi
       result_npcs.push_back(ref);
     }
   }
-  
+
   return result_npcs;
 }
 
@@ -551,11 +551,11 @@ void level_display::on_button_released(GdkEventButton* event) {
       m_dragging = false;
     }
 
-    // Stop selecting 
+    // Stop selecting
     if (m_selecting) {
       m_selecting = false;
 
-      // select tiles if no npc is selected 
+      // select tiles if no npc is selected
       if (!npc_selected()) {
         // Clear empty selections
         if (m_select_width*m_select_height == 0) {
@@ -661,7 +661,7 @@ void level_display::drag_selection(tile_buf& tiles,
   m_select_height = selection.get_height() * m_tile_height;
 
   m_dragging = true;
-  
+
   invalidate();
 }
 
@@ -700,7 +700,7 @@ void level_display::drag_selection(const level_map::npc_ref& ref) {
   m_level_map->move_npc(selected_npc, to_tiles_x(m_select_x), to_tiles_y(m_select_y));
 
   m_dragging = true;
-  
+
   invalidate();
 }
 
@@ -793,7 +793,7 @@ void level_display::flood_fill(int tx, int ty, int fill_with_index) {
   int start_y = m_level_map->get_height_tiles();
   int end_x = -1;
   int end_y = -1;
-  
+
   while (!queue.empty()) {
     std::pair<int, int> current_node = queue.front(); queue.pop();
     changed_tiles.push_back(current_node);
@@ -850,7 +850,7 @@ void level_display::flood_fill(int tx, int ty, int fill_with_index) {
     buffer.get_tile(cx, cy).index = fill_index;
   }
   add_undo_diff(new tile_diff(start_x, start_y, buffer, m_active_layer));
-  
+
   invalidate();
 }
 
@@ -901,7 +901,7 @@ void level_display::draw_tiles(level* current_level) {
   if (((!m_position_buffer || !m_texcoord_buffer) && m_use_vbo) ||
       (!m_use_vbo && m_positions.empty()))
     setup_buffers();
- 
+
   // TODO: handle different tilesets per level
   // Each tile needs 4 vertices and 4 texcoords
   const std::size_t size = static_cast<std::size_t>(current_level->get_width() * current_level->get_height() * 4);
@@ -974,7 +974,7 @@ void level_display::draw_tiles(level* current_level) {
           float x2 = static_cast<float>((tx+1)*m_tile_width)/m_tileset.image_width * m_tileset.width;
           float y1 = static_cast<float>(ty*m_tile_height)/m_tileset.image_height * m_tileset.height;
           float y2 = static_cast<float>((ty+1)*m_tile_height)/m_tileset.image_height * m_tileset.height;
-          
+
           // Fill texcoord array at the current vertex position
           int index = (x * height + y) * 4;
 
@@ -1076,7 +1076,7 @@ void level_display::draw_misc(level* current_level) {
       Cairo::RefPtr<Cairo::ImageSurface>& npc_img = m_image_cache.get_image(npc_image_file);
       const int width = npc_img->get_width();
       const int height = npc_img->get_height();
-      
+
       const texture_info& tex = m_texture_cache.get_texture(npc_image_file);
       glBindTexture(GL_TEXTURE_2D, tex.index);
       glBegin(GL_QUADS);
@@ -1118,7 +1118,7 @@ void level_display::draw_misc(level* current_level) {
   }
 }
 
-void level_display::draw_all() { 
+void level_display::draw_all() {
   // Apply scroll offset
   int offset_x, offset_y;
   get_scroll_offset(offset_x, offset_y);
@@ -1192,7 +1192,7 @@ void level_display::setup_buffers() {
   if (!m_use_vbo) {
     std::cerr << "level_display::setup_buffers: no ARB_vertex_buffer_object support, using vertex arrays" << std::endl;
   }
-  
+
   if (m_use_vbo) {
     if (!m_position_buffer)
       glGenBuffers(1, &m_position_buffer);
@@ -1260,7 +1260,7 @@ const boost::filesystem::path level_editor::level_display::get_current_level_pat
 void level_editor::level_display::set_unsaved(int level_x, int level_y, bool new_unsaved) {
   std::pair<int, int> level_key(level_x, level_y);
   m_unsaved_levels[level_key] = new_unsaved;
-  
+
   m_signal_unsaved_status_changed(new_unsaved);
 }
 

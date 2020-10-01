@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 project (gonstruct)
 
-set(GONSTRUCT_VERSION 0.2.3)
+set(GONSTRUCT_VERSION 0.2.4)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/gonstruct_config.h.in"
@@ -19,7 +19,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 if(WIN32)
   find_program(WINDRES windres)
-  
+
   if(NOT WINDRES)
     message("Could not find windres to build gonstruct.rc")
   endif(NOT WINDRES)

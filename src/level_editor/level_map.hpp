@@ -5,13 +5,13 @@
 #include <boost/multi_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace Graal {
 
 namespace level_editor {
 
 class filesystem;
-
 /* TODO: Needs cleaning up, determine what needs to be in the base class,
  * and what should go into derived classes. Also think about whether the
  * getters for the source's size should be in the base class */
@@ -41,10 +41,10 @@ protected:
 /* A map source representing a single level */
 class single_level_map_source: public level_map_source {
 public:
-  single_level_map_source(const boost::filesystem::path& file_name);
+  explicit single_level_map_source(const boost::filesystem::path& file_name);
 
-  virtual level* load_level(int x, int y);
-  virtual void save_level(int x, int y, level* _level);
+  level* load_level(int x, int y) override;
+  void save_level(int x, int y, level* _level) override;
 };
 
 /* A map source retrieving its level names from a GMap */
@@ -52,8 +52,8 @@ class gmap_level_map_source: public level_map_source {
 public:
   gmap_level_map_source(filesystem& _filesystem, const boost::filesystem::path& gmap_file_name);
 
-  virtual level* load_level(int x, int y);
-  virtual void save_level(int x, int y, level* _level);
+  level* load_level(int x, int y) override;
+  void save_level(int x, int y, level* _level) override;
 protected:
   filesystem& m_filesystem;
   boost::filesystem::path m_gmap_file_name;
@@ -65,11 +65,11 @@ protected:
 class level_map: boost::noncopyable {
 public:
   struct npc_ref {
-    int level_x, level_y;
+    int level_x{}, level_y{};
     int id;
 
     npc_ref(): id(0) {}
-    bool operator==(const npc_ref& o) { return level_x == o.level_x && level_y == o.level_y && id == o.id; }
+    bool operator==(const npc_ref& o) const { return level_x == o.level_x && level_y == o.level_y && id == o.id; }
   };
 
   typedef boost::multi_array<boost::shared_ptr<level>, 2> level_list_type;

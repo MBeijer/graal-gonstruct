@@ -312,9 +312,9 @@ void level_editor::window::on_preferences_changed(
   }
 }
 
-std::auto_ptr<level_editor::level_display>
+std::unique_ptr<level_editor::level_display>
 level_editor::window::create_level_display() {
-  std::auto_ptr<level_display> display(new level_display(
+  std::unique_ptr<level_display> display(new level_display(
       m_preferences, m_image_cache,
       default_tile.get_tile()));
   display->set_tile_size(m_tile_width, m_tile_height);
@@ -405,7 +405,7 @@ void level_editor::window::load_level(const boost::filesystem::path& file_path, 
 
   boost::filesystem::path ext = file_path.extension();
   try {
-    std::auto_ptr<level_display> display(create_level_display());
+    std::unique_ptr<level_display> display(create_level_display());
 
     // Load nw level or gmap depending on extension
     if (ext == ".nw") {

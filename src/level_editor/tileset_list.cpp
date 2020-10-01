@@ -1,7 +1,6 @@
 #include "tileset_list.hpp"
 #include "window.hpp"
 #include "helper.hpp"
-#include <boost/lexical_cast.hpp>
 
 using namespace Graal;
 
@@ -38,7 +37,7 @@ level_editor::edit_tileset::edit_tileset()
   show_all_children();
 }
 
-level_editor::edit_tileset::~edit_tileset() {}
+level_editor::edit_tileset::~edit_tileset() = default;
 
 void level_editor::edit_tileset::on_main_toggled() {
   bool enable = !m_check_main.get_active();
@@ -49,8 +48,8 @@ void level_editor::edit_tileset::on_main_toggled() {
 void level_editor::edit_tileset::get(const tileset& _tileset) {
   m_edit_image.set_text(_tileset.name);
   m_edit_prefix.set_text(_tileset.prefix);
-  m_edit_x.set_text(boost::lexical_cast<std::string>(_tileset.x));
-  m_edit_y.set_text(boost::lexical_cast<std::string>(_tileset.y));
+  m_edit_x.set_text(std::to_string(_tileset.x));
+  m_edit_y.set_text(std::to_string(_tileset.y));
   m_check_main.set_active(_tileset.main);
 }
 
@@ -77,9 +76,9 @@ level_editor::tileset_list::tileset_list(window& _window, preferences& _preferen
 
   // Add editable "active" column
   m_tree_view.append_column("Active", columns.active);
-  Gtk::CellRendererToggle* renderer = dynamic_cast<Gtk::CellRendererToggle*>(m_tree_view.get_column_cell_renderer(0));
+  auto* renderer = dynamic_cast<Gtk::CellRendererToggle*>(m_tree_view.get_column_cell_renderer(0));
   // For some reason there's no set_activatable function for CellRendererToggle on gtkmm 2.16 windows
-  Glib::PropertyProxy<bool> activatable = renderer->property_activatable();
+  auto activatable = renderer->property_activatable();
   activatable.set_value(true);
   renderer->signal_toggled().connect(sigc::mem_fun(
     this, &tileset_list::on_active_toggled));
@@ -106,9 +105,9 @@ level_editor::tileset_list::tileset_list(window& _window, preferences& _preferen
   Gtk::Button* button_delete = Gtk::manage(new Gtk::Button("Delete"));
   button_delete->signal_clicked().connect(sigc::mem_fun(this, &tileset_list::on_delete_clicked));
   get_action_area()->pack_start(*button_delete);
-  
+
   add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-  
+
   set_default_size(400, 300);
 
   show_all_children();
@@ -144,7 +143,7 @@ void level_editor::tileset_list::on_edit_clicked() {
   Gtk::TreeModel::iterator iter = selection->get_selected();
   if (iter) {
     Gtk::TreeRow row = *iter;
-    
+
     // get selected tileset
     tileset& _tileset = *row.get_value(columns.iter);
     edit_tileset dialog;
@@ -169,7 +168,7 @@ void level_editor::tileset_list::on_delete_clicked() {
   Gtk::TreeModel::iterator iter = selection->get_selected();
   if (iter) {
     Gtk::TreeRow row = *iter;
-    tileset_list_type::iterator tileset_iter = row.get_value(columns.iter);
+    auto tileset_iter = row.get_value(columns.iter);
     // Cache prefix to update tileset after
     std::string prefix = tileset_iter->prefix;
     m_preferences.tilesets.erase(tileset_iter);
@@ -181,11 +180,11 @@ void level_editor::tileset_list::on_delete_clicked() {
 
 void level_editor::tileset_list::on_active_toggled(const Glib::ustring& path) {
   Gtk::TreeModel::iterator iter = m_list_store->get_iter(path);
-  
+
   if (iter) {
     // Toggle the active state of the currently selected tileset
     Gtk::TreeRow row = *iter;
-    tileset_list_type::iterator tileset_iter = row.get_value(columns.iter);
+    auto tileset_iter = row.get_value(columns.iter);
 
     bool active = !tileset_iter->active;
     tileset_iter->active = active;
@@ -215,4 +214,4 @@ void level_editor::tileset_list::get() {
   }
 }
 
-level_editor::tileset_list::tileset_columns::~tileset_columns() {}
+level_editor::tileset_list::tileset_columns::~tileset_columns() = default;

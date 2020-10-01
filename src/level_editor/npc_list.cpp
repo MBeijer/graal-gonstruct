@@ -1,8 +1,5 @@
 #include "window.hpp"
 #include "npc_list.hpp"
-#include "helper.hpp"
-#include "undo_diffs.hpp"
-#include "level.hpp"
 #include <string>
 #include "edit_npc.hpp"
 
@@ -31,9 +28,9 @@ level_editor::npc_list::npc_list(window& _window)
   Gtk::Button* button_delete = Gtk::manage(new Gtk::Button("Delete"));
   button_delete->signal_clicked().connect(sigc::mem_fun(this, &npc_list::on_delete_clicked));
   get_action_area()->pack_start(*button_delete);
-  
+
   add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-  
+
   set_default_size(400, 300);
 
   show_all_children();
@@ -55,7 +52,7 @@ void level_editor::npc_list::on_edit_clicked() {
   Gtk::TreeModel::iterator iter = selection->get_selected();
   if (iter) {
     Gtk::TreeRow row = *iter;
-    
+
     // get selected npc
     npc& current_npc = *row.get_value(columns.iter);
     edit_npc dialog;
@@ -113,4 +110,4 @@ void level_editor::npc_list::get() {
   }
 }
 
-level_editor::npc_list::npc_columns::~npc_columns() {}
+level_editor::npc_list::npc_columns::~npc_columns() = default;

@@ -43,7 +43,7 @@ file_commands::file_commands(window& _window, header& _header, preferences& _pre
 
 void file_commands::on_action_new() {
   try {
-    std::auto_ptr<level_display> display(m_window.create_level_display());
+    std::unique_ptr<level_display> display(m_window.create_level_display());
 
     display->new_level(m_window.default_tile.get_tile());
     m_window.create_new_page(*Gtk::manage((display.release())));
@@ -72,7 +72,7 @@ void file_commands::on_action_open() {
       }
     }
   }
-  
+
   m_fc_open.hide();
 }
 

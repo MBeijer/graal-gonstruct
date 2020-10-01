@@ -15,7 +15,7 @@ namespace Graal {
     class tile_diff : public basic_diff {
     public:
       tile_diff(int x, int y, tile_buf& tiles, int layer);
-      virtual basic_diff* apply(level_map& target);
+      basic_diff* apply(level_map& target) override;
 
     private:
       int m_layer;
@@ -40,9 +40,9 @@ namespace Graal {
      * Undos the creation of a NPC and requires a reference to the NPC to do that */
     class create_npc_diff : public basic_diff {
     public:
-      create_npc_diff(const level_map::npc_ref& ref);
+      explicit create_npc_diff(const level_map::npc_ref& ref);
 
-      virtual basic_diff* apply(level_map& target);
+      basic_diff* apply(level_map& target) override;
     protected:
       level_map::npc_ref m_ref;
     };
