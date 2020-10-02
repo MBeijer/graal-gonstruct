@@ -1,7 +1,7 @@
 #!/bin/bash
 export GOBACK="${PWD}"
 export TOOLCHAIN="i686-w64-mingw32.shared"
-export {PREFIX}="/usr/src/mxe/usr/${TOOLCHAIN}"
+export PREFIX="/usr/src/mxe/usr/${TOOLCHAIN}"
 
 cd ${PREFIX}/
 wget http://ftp.acc.umu.se/pub/gnome/binaries/win32/gtksourceview/2.10/gtksourceview-2.10.0.zip -O gtksourceview.zip
