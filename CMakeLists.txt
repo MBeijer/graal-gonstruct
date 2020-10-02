@@ -28,7 +28,7 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 if(WIN32)
   find_program(WINDRES windres)
-  set(CMAKE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+  set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
   add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
   if(NOT WINDRES)
