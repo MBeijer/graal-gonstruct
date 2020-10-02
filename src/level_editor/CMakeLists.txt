@@ -1,5 +1,4 @@
 link_directories(${GTKMM_LIBRARY_DIRS})
-
 add_definitions(-DGLEW_STATIC)
 
 include_directories(SYSTEM
@@ -58,10 +57,9 @@ add_executable(gonstruct WIN32
 	gtkmarshalers.c
   )
 
-target_link_libraries(gonstruct ${GTKMM_LIBRARIES} core ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
+target_link_libraries(gonstruct ${GTKMM_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} core ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 if(WINDRES)
   add_dependencies(gonstruct generate_resource)
   target_link_libraries(gonstruct ${PROJECT_SOURCE_DIR}/win/gonstruct.res)
 endif(WINDRES)
-

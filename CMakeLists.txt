@@ -8,6 +8,15 @@ configure_file(
   "${PROJECT_BINARY_DIR}/gonstruct_config.h"
   )
 
+set(CMAKE_DEBUG_POSTFIX _d)
+
+set(BIN_DIR "bin" CACHE STRING "Binary output directory")
+
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/${BIN_DIR})
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTKMM gtkmm-2.4 gtksourceview-2.0 gtkgl-2.0)
 
@@ -19,6 +28,8 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 if(WIN32)
   find_program(WINDRES windres)
+  set(CMAKE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+  add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
   if(NOT WINDRES)
     message("Could not find windres to build gonstruct.rc")
@@ -40,4 +51,3 @@ endif(WIN32)
 
 include_directories("${PROJECT_BINARY_DIR}")
 add_subdirectory(src)
-

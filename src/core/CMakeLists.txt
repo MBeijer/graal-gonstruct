@@ -4,3 +4,4 @@ add_library(core
   preferences.cpp
   )
 
+target_link_libraries(core ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
