@@ -16,7 +16,6 @@ wget http://ftp.gnome.org/pub/gnome/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-
 wget http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.28/glib-dev_2.28.8-1_win32.zip -O glib.zip
 7z x -y glib.zip
 
-
 sed -i 's|/devel/target/9af0ed5b9823f125da25c47653b9c863|'${PREFIX}'|g' ${PREFIX}/lib/pkgconfig/*.pc
 sed -i 's|c:/devel/target/0b150273e7a8329c3935ca90f169d52d|'${PREFIX}'|g' ${PREFIX}/lib/pkgconfig/*.pc
 sed -i 's|c:/devel/target/94d7ecd65464faa6be24937a758e580f|'${PREFIX}'|g' ${PREFIX}/lib/pkgconfig/*.pc
@@ -32,8 +31,8 @@ ln -sf /usr/src/mxe/usr/bin/${TOOLCHAIN}-windres /usr/src/mxe/usr/bin/windres
 
 wget http://ftp.gnome.org/pub/gnome/sources/gtkglarea/2.1/gtkglarea-2.1.0.tar.xz -O gtkglarea.txz
 tar xf gtkglarea.txz
-cd ${{PREFIX}}/gtkglarea-2.1.0/
-CFLAGS=$(/usr/src/mxe/usr/bin/${TOOLCHAIN}-pkg-config --cflags glib-2.0 gdk-2.0) CXXFLAGS=$(/usr/src/mxe/usr/bin/${TOOLCHAIN}-pkg-config --cflags glib-2.0 gdk-2.0) ./configure --prefix=${{PREFIX}} --host=${TOOLCHAIN} --target=${TOOLCHAIN} --with-lib-opengl32
+cd ${PREFIX}/gtkglarea-2.1.0/
+CFLAGS=$(/usr/src/mxe/usr/bin/$TOOLCHAIN-pkg-config --cflags glib-2.0 gdk-2.0) CXXFLAGS=$(/usr/src/mxe/usr/bin/$TOOLCHAIN-pkg-config --cflags glib-2.0 gdk-2.0) ./configure --prefix=${PREFIX} --host=${TOOLCHAIN} --target=${TOOLCHAIN} --with-lib-opengl32
 make -j$(nproc)
 make install
 
